@@ -1,0 +1,299 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>SixSeven ($67) - Omnichain System</title>
+    <style>
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+        }
+
+        body {
+            background-color: #0d0d0d;
+            color: #ffffff;
+            overflow-x: hidden;
+        }
+
+        :root {
+            --avax-red: #e84142;
+            --dark-card: #1a1a1a;
+        }
+
+        header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 20px 5%;
+            background-color: rgba(13, 13, 13, 0.95);
+            border-bottom: 1px solid #262626;
+            position: sticky;
+            top: 0;
+            z-index: 100;
+        }
+
+        .logo {
+            font-size: 24pt;
+            font-weight: bold;
+            color: var(--avax-red);
+            letter-spacing: 2px;
+        }
+
+        .btn-connect {
+            background-color: var(--avax-red);
+            color: white;
+            border: none;
+            padding: 10px 20px;
+            border-radius: 6px;
+            font-weight: bold;
+            cursor: pointer;
+            transition: 0.3s;
+        }
+
+        .btn-connect:hover {
+            background-color: #c63132;
+            box-shadow: 0 0 15px rgba(232, 65, 66, 0.4);
+        }
+
+        .hero {
+            text-align: center;
+            padding: 80px 20px;
+            background: radial-gradient(circle at center, #260b0c 0%, #0d0d0d 70%);
+        }
+
+        .hero h1 {
+            font-size: 42pt;
+            margin-bottom: 15px;
+            text-transform: uppercase;
+            display: inline-block;
+            animation: shake 2.5s infinite ease-in-out;
+        }
+
+        @keyframes shake {
+            0%, 100% { transform: rotate(0deg); }
+            20% { transform: rotate(-6deg); }
+            40% { transform: rotate(5deg); }
+            60% { transform: rotate(-4deg); }
+            80% { transform: rotate(3deg); }
+        }
+
+        .hero p {
+            color: #a6a6a6;
+            font-size: 14pt;
+            max-width: 600px;
+            margin: 0 auto;
+        }
+
+        .main-container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 40px 20px;
+        }
+
+        .panel-card {
+            background-color: var(--dark-card);
+            border: 1px solid #262626;
+            border-radius: 12px;
+            padding: 30px;
+            margin-bottom: 30px;
+            box-shadow: 0 4px 20px rgba(0,0,0,0.5);
+        }
+
+        .panel-card h2 {
+            font-size: 18pt;
+            margin-bottom: 20px;
+            border-left: 4px solid var(--avax-red);
+            padding-left: 12px;
+            color: #f2f2f2;
+        }
+
+        .bridge-interface {
+            background-color: #121212;
+            border: 1px solid #262626;
+            border-radius: 8px;
+            padding: 20px;
+            max-width: 500px;
+            margin: 0 auto;
+        }
+
+        .network-select {
+            display: block;
+            width: 100%;
+            background-color: #1a1a1a;
+            border: 1px solid #404040;
+            color: white;
+            padding: 12px;
+            border-radius: 6px;
+            margin-bottom: 15px;
+            font-size: 11pt;
+        }
+
+        .input-amount {
+            width: 100%;
+            background-color: #1a1a1a;
+            border: 1px solid #404040;
+            color: white;
+            padding: 15px;
+            border-radius: 6px;
+            font-size: 14pt;
+            text-align: right;
+            margin-bottom: 20px;
+        }
+
+        .btn-action {
+            width: 100%;
+            background-color: #ffffff;
+            color: #0d0d0d;
+            border: none;
+            padding: 15px;
+            border-radius: 6px;
+            font-size: 12pt;
+            font-weight: bold;
+            cursor: pointer;
+            transition: 0.2s;
+        }
+
+        .btn-action:hover {
+            background-color: #e6e6e6;
+        }
+
+        footer {
+            background-color: #060606;
+            border-top: 1px solid #262626;
+            padding: 40px 20px;
+            text-align: center;
+            color: #666666;
+            font-size: 10pt;
+        }
+
+        .studio-tag {
+            color: #a6a6a6;
+            font-weight: bold;
+            letter-spacing: 1px;
+        }
+    </style>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/ethers/5.7.2/ethers.umd.min.js"></script>
+</head>
+<body>
+
+    <header>
+        <div class="logo">$67</div>
+        <button class="btn-connect" onclick="connectWallet()">Connect Wallet</button>
+    </header>
+
+    <section class="hero">
+        <h1>SixSeven</h1>
+        <p>The first native omnichain architecture running seamlessly and integrated between Avalanche and BNB Chain.</p>
+    </section>
+
+    <div class="main-container">
+        <div class="panel-card">
+            <h2 style="text-align: center;">Network Synchronization Terminal</h2>
+            <div class="bridge-interface">
+                <label style="font-size: 9pt; color: #8c8c8c; display:block; margin-bottom: 5px;">SOURCE NETWORK</label>
+                <select class="network-select" id="fromNetwork">
+                    <option value="avax">Avalanche (C-Chain)</option>
+                    <option value="bsc">BNB Chain</option>
+                </select>
+
+                <label style="font-size: 9pt; color: #8c8c8c; display:block; margin-bottom: 5px;">DESTINATION NETWORK</label>
+                <select class="network-select" id="toNetwork" disabled>
+                    <option value="bsc">BNB Chain</option>
+                </select>
+
+                <label style="font-size: 9pt; color: #8c8c8c; display:block; margin-bottom: 5px;">TOTAL TOKENS</label>
+                <input type="number" class="input-amount" placeholder="0.0" id="amountInput">
+
+                <button class="btn-action" onclick="executeSync()">Start Network Switch</button>
+            </div>
+        </div>
+    </div>
+
+    <footer>
+        <p>&copy; 2026 SixSeven Project. All rights reserved.</p>
+        <p>Powered by <span class="studio-tag">Mechanism Studio Dev</span></p>
+    </footer>
+
+    <script>
+        const BACKEND_URL = "https://your-app-on-render.onrender.com"; 
+
+        const SYSTEM_ABI = [
+            "function send(tuple(uint32 dstEid, bytes32 to, uint256 amountLD, uint256 minAmountLD, bytes extraOptions, bytes composeMsg, bytes oftCmd) sendParam, tuple(uint256 nativeFee, uint256 lzTokenFee) fee, address refundAddress) public payable returns (tuple(bytes32 guid, uint64 nonce, tuple(uint256 nativeFee, uint256 lzTokenFee) fee))",
+            "function approve(address spender, uint256 value) external returns (bool)"
+        ];
+
+        const NETWORK_MAP = {
+            avax: { id: 30106, token: "0x676D1bE3B820d6C43442401C16cdc3eAb914833c", targetId: 30102 },
+            bsc: { id: 30102, token: "0x9e628D76ebAE225d703875c30bd7D9d1af8EB8b4", targetId: 30106 }
+        };
+
+        let userWallet = null;
+
+        async function connectWallet() {
+            if (window.ethereum) {
+                const accounts = await window.ethereum.request({ method: 'eth_requestAccounts' });
+                userWallet = accounts[0];
+                document.querySelector('.btn-connect').innerText = userWallet.substring(0,6) + "..." + userWallet.substring(38);
+            } else {
+                alert("Please install a compatible Web3 wallet!");
+            }
+        }
+
+        async function executeSync() {
+            if (!userWallet) return alert("Connect your wallet first!");
+            const fromNet = document.getElementById('fromNetwork').value;
+            const amount = document.getElementById('amountInput').value;
+            if (!amount || amount <= 0) return alert("Please input a valid amount.");
+
+            const activeNet = NETWORK_MAP[fromNet];
+            
+            try {
+                const response = await fetch(`${BACKEND_URL}/api/sync-check`, {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({
+                        srcNetId: activeNet.id,
+                        dstNetId: activeNet.targetId,
+                        target: activeNet.token,
+                        account: userWallet,
+                        quantity: amount
+                    })
+                });
+                
+                const data = await response.json();
+                if (!data.success) throw new Error(data.error);
+
+                const provider = new ethers.providers.Web3Provider(window.ethereum);
+                const signer = provider.getSigner();
+                
+                const amountWei = ethers.utils.parseEther(amount.toString());
+                const minAmountWei = ethers.utils.parseEther((amount * 0.99).toString());
+                const targetBytes = ethers.utils.hexZeroPad(userWallet, 32);
+
+                alert("Approve the token limit for synchronization in your wallet...");
+                const tokenContract = new ethers.Contract(activeNet.token, ["function approve(address spender, uint256 q) external returns (bool)"], signer);
+                const appTx = await tokenContract.approve(activeNet.token, amountWei);
+                await appTx.wait();
+
+                const mainContract = new ethers.Contract(activeNet.token, SYSTEM_ABI, signer);
+                const routeParams = [activeNet.targetId, targetBytes, amountWei, minAmountWei, data.payloadOptions, "0x", "0x"];
+                const feeStructure = [data.requiredFee, 0];
+
+                alert("Confirm the network migration transaction in your wallet...");
+                const tx = await mainContract.send(routeParams, feeStructure, userWallet, { value: data.requiredFee });
+                alert("Operation successful! Transaction ID: " + tx.hash);
+            } catch (err) {
+                alert("Process failed: " + err.message);
+            }
+        }
+
+        document.getElementById('fromNetwork').addEventListener('change', function() {
+            const toSelect = document.getElementById('toNetwork');
+            toSelect.innerHTML = this.value === 'avax' ? '<option value="bsc">BNB Chain</option>' : '<option value="avax">Avalanche (C-Chain)</option>';
+        });
+    </script>
+</body>
+</html>
